@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --text-xxs: 0.625rem;
+  --text-xxs--line-height: 1rem;
+  --inset-shadow-px-b: inset 0 -1px #eeeeee;
+  --inset-shadow-px-t: inset 0 1px #eeeeee;
+}
+
+html {
+  font-family: 'Work Sans', sans-serif;
+}
+
+th,
+td {
+  @apply border border-[#F6F6F6] min-w-31;
+}
+
+td input {
+  @apply p-2 text-xs focus:inset-ring inset-ring-[#6C8B70] !outline-none;
+}
+
+th:first-child,
+td:first-child {
+  @apply min-w-8 text-center text-[#757575] text-xs;
+}
