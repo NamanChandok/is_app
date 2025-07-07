@@ -7,17 +7,17 @@ interface PriorityCellProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const PriorityInput: React.FC<PriorityCellProps> = ({ defaultValue, ...restProps }) => {
   const [value, setValue] = useState(defaultValue || '');
-  const [color, setColor] = useState('#121212');
+  const [color, setColor] = useState('text-[#121212]');
 
   useEffect(() => {
     if (value.toLowerCase() === 'high') {
-      setColor('#EF4D44');
+      setColor('text-[#EF4D44]');
     } else if (value.toLowerCase() === 'medium') {
-      setColor('#C29210');
+      setColor('text-[#C29210]');
     } else if (value.toLowerCase() === 'low') {
-      setColor('#1A8CFF');
+      setColor('text-[#1A8CFF]');
     } else {
-      setColor('#121212');
+      setColor('text-[#121212]');
     }
   }, [value]);
 
@@ -26,7 +26,7 @@ const PriorityInput: React.FC<PriorityCellProps> = ({ defaultValue, ...restProps
       type="text"
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      className={`font-semibold text-center capitalize text-[${color}]`}
+      className={`font-semibold text-center capitalize ${color}`}
       {...restProps}
     />
   );

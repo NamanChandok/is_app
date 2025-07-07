@@ -7,25 +7,25 @@ interface StatusCellProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const StatusInput: React.FC<StatusCellProps> = ({ defaultValue, ...restProps }) => {
   const [value, setValue] = useState(defaultValue || '');
-  const [color, setColor] = useState('#121212');
-  const [bg, setBg] = useState('#EEEEEE');
+  const [color, setColor] = useState('text-[#121212]');
+  const [bg, setBg] = useState('bg-transparent');
 
   useEffect(() => {
     if (value.toLowerCase() === 'in-process') {
-      setColor('#85640B');
-      setBg('#FFF3D6');
+      setColor('text-[#85640B]');
+      setBg('bg-[#FFF3D6]');
     } else if (value.toLowerCase() === 'need to start') {
-      setColor('#475569');
-      setBg('#E2E8F0');
+      setColor('text-[#475569]');
+      setBg('bg-[#E2E8F0]');
     } else if (value.toLowerCase() === 'complete') {
-      setColor('#0A6E3D');
-      setBg('#D3F2E3');
+      setColor('text-[#0A6E3D]');
+      setBg('bg-[#D3F2E3]');
     } else if (value.toLowerCase() === 'blocked') {
-      setColor('#C22219');
-      setBg('#FFE1DE');
+      setColor('text-[#C22219]');
+      setBg('bg-[#FFE1DE]');
     } else {
-      setColor('#121212');
-      setBg('transparent');
+      setColor('text-[#121212]');
+      setBg('bg-transparent');
     }
   }, [value]);
 
@@ -35,11 +35,11 @@ const StatusInput: React.FC<StatusCellProps> = ({ defaultValue, ...restProps }) 
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className={`font-medium text-center text-[${color}] relative z-10`}
+        className={`font-medium text-center ${color} relative z-10`}
         {...restProps}
       />
       <div
-        className={`absolute bg-[${bg}] px-2 py-1 rounded-full text-xs text-transparent w-max top-1/2 left-1/2 -translate-1/2`}
+        className={`absolute ${bg} px-2 py-1 rounded-full text-xs text-transparent w-max top-1/2 left-1/2 -translate-1/2`}
       >
         {value}
       </div>
