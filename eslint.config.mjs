@@ -51,7 +51,7 @@ export default defineConfig([
     },
 
     rules: {
-      'react/react-in-jsx-scope': 'on',
+      'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },

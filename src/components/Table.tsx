@@ -1,4 +1,3 @@
-import React from 'react';
 export default function Table() {
   const reloadButton = () => {
     const r = document.querySelector('#reloadButton');
@@ -460,37 +459,39 @@ export default function Table() {
         </tr>
       </thead>
       <tbody>
-        {<tr>
-          <td>1</td>
-          <td>
-            <input value="lorem" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="ipsum" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="dolor" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="sit" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="amet" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="consectetur" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="adipiscing" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="elit" className="h-full w-full" />
-          </td>
-          <td>
-            <input value="sed" className="h-full w-full" />
-          </td>
-          <td></td>
-        </tr>}
+        {
+          <tr>
+            <td>1</td>
+            <td>
+              <input value="lorem" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="ipsum" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="dolor" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="sit" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="amet" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="consectetur" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="adipiscing" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="elit" className="h-full w-full" />
+            </td>
+            <td>
+              <input value="sed" className="h-full w-full" />
+            </td>
+            <td></td>
+          </tr>
+        }
       </tbody>
     </table>
   );
