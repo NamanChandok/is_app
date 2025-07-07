@@ -1,11 +1,22 @@
+import { useEffect, useState } from 'react';
 import Table from './components/Table';
 
 function App() {
+  const [search, setSearch] = useState('');
+  const [showFields, setShowFields] = useState(true);
+
+  useEffect(() => {
+    console.log('Search changed:', search);
+  }, [search]);
+
   return (
     <>
       <nav className="fixed inset-x-0 top-0 px-4 py-2 flex justify-between items-center inset-shadow-px-b bg-white">
         <div className="flex items-center gap-2">
-          <button className="hover:bg-[#EEEEEE] cursor-pointer rounded-full flex items-center justify-center h-8 w-8 text-[#618666]">
+          <button
+            onClick={() => console.log('Open Sidebar')}
+            className="hover:bg-[#EEEEEE] cursor-pointer rounded-full flex items-center justify-center h-8 w-8 text-[#618666]"
+          >
             <svg
               width="24"
               height="24"
@@ -53,7 +64,10 @@ function App() {
             <a href="#" className="text-[#121212] hover:underline">
               Spreadsheet 3
             </a>
-            <button className="hover:bg-[#EEEEEE] cursor-pointer rounded-full flex items-center justify-center h-6 w-6">
+            <button
+              onClick={() => console.log('Spreadsheet 3 Options')}
+              className="hover:bg-[#EEEEEE] cursor-pointer rounded-full flex items-center justify-center h-6 w-6"
+            >
               <svg
                 width="20"
                 height="20"
@@ -94,9 +108,14 @@ function App() {
             <input
               placeholder="Search within sheet"
               className="h-min w-30 text-xs placeholder:text-[#757575] !outline-none"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             ></input>
           </div>
-          <button className="relative p-2 cursor-pointer hover:bg-[#EEEEEE] rounded-md group">
+          <button
+            onClick={() => console.log('Open Notifications')}
+            className="relative p-2 cursor-pointer hover:bg-[#EEEEEE] rounded-md group"
+          >
             <svg
               width="24"
               height="24"
@@ -128,7 +147,10 @@ function App() {
       </nav>
       <header className="px-2 py-1.5 fixed inset-x-0 top-14 inset-shadow-px-b text-sm flex items-center justify-between text-[#121212] bg-white">
         <div className="flex items-center gap-2">
-          <button className="p-2 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md">
+          <button
+            onClick={() => console.log('Open Toolbar')}
+            className="p-2 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
+          >
             Tool bar
             <svg
               width="16"
@@ -151,7 +173,10 @@ function App() {
           </button>
           <div className="h-6 w-px bg-[#EEEEEE]"></div>
           <div className="flex items-center gap-1">
-            <button className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md">
+            <button
+              onClick={() => setShowFields(!showFields)}
+              className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
+            >
               <svg
                 width="20"
                 height="20"
@@ -164,9 +189,12 @@ function App() {
                   fill="currentColor"
                 />
               </svg>
-              Hide fields
+              {showFields ? 'Hide' : 'Show'} fields
             </button>
-            <button className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md">
+            <button
+              onClick={() => console.log('Sort Button')}
+              className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
+            >
               <svg
                 width="20"
                 height="20"
@@ -181,7 +209,10 @@ function App() {
               </svg>
               Sort
             </button>
-            <button className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md">
+            <button
+              onClick={() => console.log('Filter Button')}
+              className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
+            >
               <svg
                 width="20"
                 height="20"
@@ -196,7 +227,10 @@ function App() {
               </svg>
               Filter
             </button>
-            <button className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md">
+            <button
+              onClick={() => console.log('Cell View Button')}
+              className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
+            >
               <svg
                 width="20"
                 height="20"
@@ -214,7 +248,10 @@ function App() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="p-2 pr-3 inset-ring inset-ring-[#EEEEEE] hover:bg-[#EEEEEE] cursor-pointer rounded-md text-[#545454] flex items-center gap-2">
+          <button
+            onClick={() => console.log('Import Button')}
+            className="p-2 pr-3 inset-ring inset-ring-[#EEEEEE] hover:bg-[#EEEEEE] cursor-pointer rounded-md text-[#545454] flex items-center gap-2"
+          >
             <svg
               width="20"
               height="20"
@@ -229,7 +266,10 @@ function App() {
             </svg>
             Import
           </button>
-          <button className="p-2 pr-3 inset-ring inset-ring-[#EEEEEE] hover:bg-[#EEEEEE] cursor-pointer rounded-md text-[#545454] flex items-center gap-2">
+          <button
+            onClick={() => console.log('Export Button')}
+            className="p-2 pr-3 inset-ring inset-ring-[#EEEEEE] hover:bg-[#EEEEEE] cursor-pointer rounded-md text-[#545454] flex items-center gap-2"
+          >
             <svg
               width="20"
               height="20"
@@ -244,7 +284,10 @@ function App() {
             </svg>
             Export
           </button>
-          <button className="p-2 pr-3 inset-ring inset-ring-[#EEEEEE] hover:bg-[#EEEEEE] cursor-pointer rounded-md text-[#545454] flex items-center gap-2">
+          <button
+            onClick={() => console.log('Share Button')}
+            className="p-2 pr-3 inset-ring inset-ring-[#EEEEEE] hover:bg-[#EEEEEE] cursor-pointer rounded-md text-[#545454] flex items-center gap-2"
+          >
             <svg
               width="20"
               height="20"
@@ -259,7 +302,10 @@ function App() {
             </svg>
             Share
           </button>
-          <button className="px-6 py-2 bg-[#4B6A4F] hover:opacity-90 cursor-pointer rounded-md text-white flex items-center gap-2">
+          <button
+            onClick={() => console.log('New Action Button')}
+            className="px-6 py-2 bg-[#4B6A4F] hover:opacity-90 cursor-pointer rounded-md text-white flex items-center gap-2"
+          >
             <svg
               width="20"
               height="20"
@@ -277,7 +323,7 @@ function App() {
         </div>
       </header>
       <main className="w-full h-[calc(100vh-9.5em)] h- overflow-y-scroll mt-26 text-[#121212]">
-        <Table />
+        <Table showFields={showFields} />
       </main>
       <footer className="fixed inset-x-0 bottom-0 inset-shadow-px-t bg-white text-[#757575] pl-8 pr-4 pt-1 font-medium flex">
         <a
@@ -295,7 +341,10 @@ function App() {
         <a href="#" className="px-4 py-2.5 hover:bg-[#EEEEEE]">
           Arrived
         </a>
-        <button className="py-3 px-2 hover:bg-[#EEEEEE] cursor-pointer">
+        <button
+          onClick={() => console.log('Add sheet')}
+          className="py-3 px-2 hover:bg-[#EEEEEE] cursor-pointer"
+        >
           <svg
             width="20"
             height="20"

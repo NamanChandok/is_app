@@ -14,14 +14,14 @@ html {
 
 th,
 td {
-  @apply border border-[#F6F6F6] min-w-31;
+  @apply border border-[#F6F6F6] min-w-31 min-h-8 h-full relative;
 }
 
 td input {
-  @apply p-2 text-xs focus:inset-ring inset-ring-[#6C8B70] !outline-none;
+  @apply p-2 text-xs h-full focus:inset-ring inset-ring-[#6C8B70] align-top w-full truncate !outline-none;
 }
 
 th:first-child,
 td:first-child {
-  @apply min-w-8 text-center text-[#757575] text-xs;
+  @apply min-w-8 text-center place-items-center text-[#757575] text-xs cursor-default relative;
 }
