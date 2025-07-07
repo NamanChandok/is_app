@@ -25,3 +25,8 @@ th:first-child,
 td:first-child {
   @apply min-w-8 text-center place-items-center text-[#757575] text-xs cursor-default relative;
 }
+
+th:last-child,
+td:last-child {
+  border-inline: 2px dashed #cbcbcb;
+}
