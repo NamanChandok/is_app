@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
 import type { InputHTMLAttributes } from 'react';
 
 interface StatusCellProps extends InputHTMLAttributes<HTMLInputElement> {
