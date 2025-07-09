@@ -1,6 +1,6 @@
 # Spreadsheet Frontend
 
-This is a static, front-end-only React application built with TypeScript and Vite, made as an application for an internship. The task was to recreate a spreadsheet application UI given in Figma and add features such as Google Sheet/Excel like spread sheet experience, Keyboard navigation, Column resize / hide toggles.
+This is a static, front-end-only React application built with TypeScript and Vite, made as an assignment for an internship application. The task was to recreate a spreadsheet application UI given in Figma and add features such as Google Sheet/Excel like spread sheet experience, Keyboard navigation, Column resize / hide toggles.
 
 ## Deployed Links
 
