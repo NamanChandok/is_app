@@ -316,7 +316,10 @@ function App() {
           <div className="flex items-center gap-1">
             <div className="relative">
               <button
-                onClick={() => setSelectFields(!selectFields)}
+                onClick={() => {
+                  setSelectFields(!selectFields);
+                  setSelectSort(false);
+                }}
                 className="flex items-center gap-1 p-2 pr-3 hover:bg-[#EEEEEE] cursor-pointer rounded-md"
               >
                 <svg
@@ -351,6 +354,7 @@ function App() {
                 ].map((field) => (
                   <div key={field} className="flex items-center gap-2 mb-1.5">
                     <input
+                      id={field + '_d'}
                       type="checkbox"
                       checked={showFields.includes(field)}
                       onChange={(e) => {
@@ -362,7 +366,7 @@ function App() {
                       }}
                       className="rounded text-[#4B6A4F] focus:ring-[#4B6A4F]"
                     />
-                    <label htmlFor={field} className="text-xs">
+                    <label htmlFor={field + '_d'} className="text-xs">
                       {field}
                     </label>
                   </div>
@@ -371,7 +375,10 @@ function App() {
             </div>
             <div className="relative">
               <button
-                onClick={() => setSelectSort(!selectSort)}
+                onClick={() => {
+                  setSelectFields(false);
+                  setSelectSort(!selectSort);
+                }}
                 className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
               >
                 <svg
@@ -397,6 +404,7 @@ function App() {
                   (field) => (
                     <div key={field} className="flex items-center gap-2 mb-1.5">
                       <input
+                        id={field}
                         type="radio"
                         checked={sortBy === field}
                         onChange={(e) => {

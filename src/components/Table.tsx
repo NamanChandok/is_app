@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PriorityInput from './PriorityInput';
 import StatusInput from './StatusInput';
 
@@ -33,6 +33,39 @@ type Props = {
 };
 
 export default function Table({ showFields, data, setData }: Props) {
+  const cols = showFields.length;
+  const rows = data.length;
+  const inputRefs = useRef<(HTMLInputElement | null)[][]>(
+    Array.from({ length: rows }, () => Array(cols).fill(null)),
+  );
+
+  useEffect(() => {
+    inputRefs.current[0][0]?.focus();
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent, row: number, col: number) => {
+    let newRow = row;
+    let newCol = col;
+
+    switch (e.key) {
+      case 'ArrowUp':
+        newRow = Math.max(row - 1, 0);
+        break;
+      case 'ArrowDown':
+        newRow = Math.min(row + 1, rows - 1);
+        break;
+      case 'ArrowLeft':
+        newCol = Math.max(col - 1, 0);
+        break;
+      case 'ArrowRight':
+        newCol = Math.min(col + 1, cols - 1);
+        break;
+      default:
+        return;
+    }
+    inputRefs.current[newRow][newCol]?.focus();
+  };
+
   const reloadButton = () => {
     const r = document.querySelector('#reloadButton');
     r?.classList.add('animate-spin');
@@ -81,10 +114,6 @@ export default function Table({ showFields, data, setData }: Props) {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   return (
     <table className="border-collapse w-full">
@@ -656,6 +685,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Job Request') && (
                 <td>
                   <input
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Job Request')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Job Request'))}
                     value={item.jobRequest}
                     onChange={(e) => {
                       const newData = [...data];
@@ -668,6 +701,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Submitted') && (
                 <td>
                   <input
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Submitted')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Submitted'))}
                     value={item.submitted}
                     className="text-end"
                     onChange={(e) => {
@@ -681,6 +718,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Status') && (
                 <td>
                   <StatusInput
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Status')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Status'))}
                     value={item.status}
                     setValue={(newValue) => {
                       const newData = [...data];
@@ -693,6 +734,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Submitter') && (
                 <td>
                   <input
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Submitter')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Submitter'))}
                     value={item.submitter}
                     onChange={(e) => {
                       const newData = [...data];
@@ -705,6 +750,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('URL') && (
                 <td>
                   <input
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('URL')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('URL'))}
                     value={item.url}
                     className="underline"
                     onChange={(e) => {
@@ -718,6 +767,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Assigned') && (
                 <td>
                   <input
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Assigned')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Assigned'))}
                     value={item.assigned}
                     onChange={(e) => {
                       const newData = [...data];
@@ -730,6 +783,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Priority') && (
                 <td>
                   <PriorityInput
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Priority')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Priority'))}
                     value={item.priority}
                     setValue={(newValue) => {
                       const newData = [...data];
@@ -742,6 +799,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Due Date') && (
                 <td>
                   <input
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Due Date')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Due Date'))}
                     value={item.dueDate}
                     className="text-end"
                     onChange={(e) => {
@@ -755,6 +816,10 @@ export default function Table({ showFields, data, setData }: Props) {
               {showFields.includes('Est. Value') && (
                 <td>
                   <input
+                    ref={(el) => {
+                      inputRefs.current[index][showFields.indexOf('Est. Value')] = el;
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, index, showFields.indexOf('Est. Value'))}
                     value={item.estValue}
                     className="text-end"
                     onChange={(e) => {
