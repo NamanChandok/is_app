@@ -1,17 +1,158 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Table from './components/Table';
 
 function App() {
   const [search, setSearch] = useState('');
-  const [showFields, setShowFields] = useState(true);
+  const [showFields, setShowFields] = useState([
+    'Job Request',
+    'Submitted',
+    'Status',
+    'Submitter',
+    'URL',
+    'Assigned',
+    'Priority',
+    'Due Date',
+    'Est. Value',
+  ]);
+  const [selectFields, setSelectFields] = useState(false);
+  const [sortBy, setSortBy] = useState('Submitted');
+  const [selectSort, setSelectSort] = useState(false);
 
   useEffect(() => {
     console.log('Search changed:', search);
   }, [search]);
 
+  useEffect(() => {
+    console.log('Sort by changed:', sortBy);
+  }, [sortBy]);
+
+  const data = useMemo(() => {
+    const initial = [
+      {
+        jobRequest: 'Launch social media campaign for product XYZ',
+        submitted: '15-11-2024',
+        status: 'In-process',
+        submitter: 'Aisha Patel',
+        url: 'www.aishapatel.com',
+        assigned: 'Sophie Choudhury',
+        priority: 'Medium',
+        dueDate: '20-11-2024',
+        estValue: '6,200,000 ₹',
+      },
+      {
+        jobRequest: 'Update press kit for company redesign',
+        submitted: '28-10-2024',
+        status: 'Need to start',
+        submitter: 'Irfan Khan',
+        url: 'www.irfankhanportfolio.com',
+        assigned: 'Tejas Pandey',
+        priority: 'High',
+        dueDate: '30-10-2024',
+        estValue: '3,500,000 ₹',
+      },
+      {
+        jobRequest: 'Finalize user testing feedback for app update',
+        submitted: '05-12-2024',
+        status: 'In-process',
+        submitter: 'Mark Johnson',
+        url: 'www.markjohnsondesigns.com',
+        assigned: 'Rachel Lee',
+        priority: 'Medium',
+        dueDate: '10-12-2024',
+        estValue: '4,750,000 ₹',
+      },
+      {
+        jobRequest: 'Design new features for the website',
+        submitted: '10-01-2025',
+        status: 'Complete',
+        submitter: 'Emily Green',
+        url: 'www.emilygreenart.com',
+        assigned: 'Tom Wright',
+        priority: 'Low',
+        dueDate: '15-01-2025',
+        estValue: '5,900,000 ₹',
+      },
+      {
+        jobRequest: 'Prepare financial report for Q4',
+        submitted: '25-01-2025',
+        status: 'Blocked',
+        submitter: 'Jessica Brown',
+        url: 'www.jessicabrowncreative.com',
+        assigned: 'Kevin Smith',
+        priority: 'Low',
+        dueDate: '30-01-2025',
+        estValue: '2,800,000 ₹',
+      },
+    ];
+
+    while (initial.length < 101) {
+      initial.push({
+        jobRequest: '',
+        submitted: '',
+        status: '',
+        submitter: '',
+        url: '',
+        assigned: '',
+        priority: '',
+        dueDate: '',
+        estValue: '',
+      });
+    }
+
+    return initial;
+  }, []);
+
+  const [sortedData, setSortedData] = useState(data);
+
+  useEffect(() => {
+    const isEmptyRow = (row: (typeof data)[number]) =>
+      Object.values(row).every((val) => val === '');
+
+    const sorted = [...data].sort((a, b) => {
+      if (isEmptyRow(a) && !isEmptyRow(b)) return 1;
+      if (!isEmptyRow(a) && isEmptyRow(b)) return -1;
+      if (isEmptyRow(a) && isEmptyRow(b)) return 0;
+
+      const priorityOrder = ['high', 'medium', 'low'];
+
+      const statusOrder = ['need to start', 'in-process', 'blocked', 'complete'];
+
+      switch (sortBy) {
+        case 'Job Request':
+          return a.jobRequest.localeCompare(b.jobRequest);
+        case 'Submitted':
+          return new Date(a.submitted).getTime() - new Date(b.submitted).getTime();
+        case 'Status':
+          return (
+            statusOrder.indexOf(a.status.toLowerCase()) -
+            statusOrder.indexOf(b.status.toLowerCase())
+          );
+        case 'Priority':
+          return (
+            priorityOrder.indexOf(a.priority.toLowerCase()) -
+            priorityOrder.indexOf(b.priority.toLowerCase())
+          );
+        case 'Due Date':
+          return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+        case 'Est. Value':
+          return a.estValue.localeCompare(b.estValue);
+        default:
+          return 0;
+      }
+    });
+
+    setSortedData(sorted);
+  }, [sortBy, data]);
+
   return (
     <>
-      <nav className="fixed inset-x-0 top-0 px-4 py-2 flex justify-between items-center inset-shadow-px-b bg-white">
+      <nav
+        onClick={() => {
+          setSelectFields(false);
+          setSelectSort(false);
+        }}
+        className="fixed inset-x-0 top-0 px-4 py-2 flex justify-between items-center inset-shadow-px-b bg-white"
+      >
         <div className="flex items-center gap-2">
           <button
             onClick={() => console.log('Open Sidebar')}
@@ -145,7 +286,7 @@ function App() {
           </a>
         </div>
       </nav>
-      <header className="px-2 py-1.5 fixed inset-x-0 top-14 inset-shadow-px-b text-sm flex items-center justify-between text-[#121212] bg-white">
+      <header className="px-2 py-1.5 z-90 fixed inset-x-0 top-14 inset-shadow-px-b text-sm flex items-center justify-between text-[#121212] bg-white">
         <div className="flex items-center gap-2">
           <button
             onClick={() => console.log('Open Toolbar')}
@@ -173,42 +314,106 @@ function App() {
           </button>
           <div className="h-6 w-px bg-[#EEEEEE]"></div>
           <div className="flex items-center gap-1">
-            <button
-              onClick={() => setShowFields(!showFields)}
-              className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <div className="relative">
+              <button
+                onClick={() => setSelectFields(!selectFields)}
+                className="flex items-center gap-1 p-2 pr-3 hover:bg-[#EEEEEE] cursor-pointer rounded-md"
               >
-                <path
-                  d="M1.84972 1.84972C1.62783 2.07161 1.60766 2.41883 1.7892 2.66351L1.84972 2.73361L5.21186 6.09575C3.6102 7.2203 2.41314 8.89993 1.91573 10.887C1.83191 11.2218 2.03541 11.5612 2.37025 11.645C2.7051 11.7289 3.0445 11.5254 3.12832 11.1905C3.56955 9.42789 4.65926 7.94956 6.1118 6.99543L7.61982 8.50354C7.03023 9.10482 6.66666 9.92854 6.66666 10.8372C6.66666 12.6781 8.15905 14.1705 9.99999 14.1705C10.9086 14.1705 11.7324 13.807 12.3336 13.2174L17.2664 18.1503C17.5105 18.3944 17.9062 18.3944 18.1503 18.1503C18.3722 17.9284 18.3923 17.5812 18.2108 17.3365L18.1503 17.2664L13.0557 12.1712L13.0567 12.17L12.0566 11.1718L9.66497 8.78065L9.66666 8.78L7.26564 6.38152L7.26666 6.38L6.32226 5.4379L2.7336 1.84972C2.48953 1.60564 2.0938 1.60564 1.84972 1.84972ZM8.50339 9.38789L11.4493 12.3338C11.0743 12.697 10.5633 12.9205 9.99999 12.9205C8.8494 12.9205 7.91666 11.9878 7.91666 10.8372C7.91666 10.2739 8.14019 9.76287 8.50339 9.38789ZM9.99999 4.58333C9.16644 4.58333 8.35761 4.70672 7.59257 4.9375L8.62338 5.96766C9.06988 5.87943 9.53033 5.83333 9.99999 5.83333C13.2692 5.83333 16.0916 8.06688 16.8726 11.1943C16.9562 11.5292 17.2955 11.7329 17.6304 11.6492C17.9653 11.5656 18.169 11.2263 18.0854 10.8914C17.1661 7.2106 13.8463 4.58333 9.99999 4.58333ZM10.1622 7.50773L13.33 10.675C13.2452 8.9609 11.8727 7.5897 10.1622 7.50773Z"
-                  fill="currentColor"
-                />
-              </svg>
-              {showFields ? 'Hide' : 'Show'} fields
-            </button>
-            <button
-              onClick={() => console.log('Sort Button')}
-              className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.84972 1.84972C1.62783 2.07161 1.60766 2.41883 1.7892 2.66351L1.84972 2.73361L5.21186 6.09575C3.6102 7.2203 2.41314 8.89993 1.91573 10.887C1.83191 11.2218 2.03541 11.5612 2.37025 11.645C2.7051 11.7289 3.0445 11.5254 3.12832 11.1905C3.56955 9.42789 4.65926 7.94956 6.1118 6.99543L7.61982 8.50354C7.03023 9.10482 6.66666 9.92854 6.66666 10.8372C6.66666 12.6781 8.15905 14.1705 9.99999 14.1705C10.9086 14.1705 11.7324 13.807 12.3336 13.2174L17.2664 18.1503C17.5105 18.3944 17.9062 18.3944 18.1503 18.1503C18.3722 17.9284 18.3923 17.5812 18.2108 17.3365L18.1503 17.2664L13.0557 12.1712L13.0567 12.17L12.0566 11.1718L9.66497 8.78065L9.66666 8.78L7.26564 6.38152L7.26666 6.38L6.32226 5.4379L2.7336 1.84972C2.48953 1.60564 2.0938 1.60564 1.84972 1.84972ZM8.50339 9.38789L11.4493 12.3338C11.0743 12.697 10.5633 12.9205 9.99999 12.9205C8.8494 12.9205 7.91666 11.9878 7.91666 10.8372C7.91666 10.2739 8.14019 9.76287 8.50339 9.38789ZM9.99999 4.58333C9.16644 4.58333 8.35761 4.70672 7.59257 4.9375L8.62338 5.96766C9.06988 5.87943 9.53033 5.83333 9.99999 5.83333C13.2692 5.83333 16.0916 8.06688 16.8726 11.1943C16.9562 11.5292 17.2955 11.7329 17.6304 11.6492C17.9653 11.5656 18.169 11.2263 18.0854 10.8914C17.1661 7.2106 13.8463 4.58333 9.99999 4.58333ZM10.1622 7.50773L13.33 10.675C13.2452 8.9609 11.8727 7.5897 10.1622 7.50773Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Hide fields
+              </button>
+              <div
+                hidden={!selectFields}
+                className="absolute top-full left-0 p-2 text-xs bg-white rounded-sm"
               >
-                <path
-                  d="M14.3757 3.33334L14.2909 3.33904C13.9858 3.38043 13.7507 3.64192 13.7507 3.95834L13.75 14.535L11.0668 11.8537L10.9966 11.7932C10.7519 11.6117 10.4047 11.6321 10.1829 11.854C9.9389 12.0982 9.93906 12.4939 10.1832 12.7379L13.9364 16.4879L14.0065 16.5484C14.2513 16.7298 14.5985 16.7095 14.8203 16.4875L18.5671 12.7375L18.6276 12.6674C18.8091 12.4227 18.7887 12.0755 18.5668 11.8537L18.4966 11.7932C18.2519 11.6117 17.9047 11.6321 17.6829 11.854L15 14.5383L15.0007 3.95834L14.995 3.87353C14.9536 3.56846 14.6921 3.33334 14.3757 3.33334ZM5.17868 3.51641L1.43304 7.26229L1.37253 7.33239C1.19099 7.57707 1.21118 7.92429 1.43307 8.14617L1.50317 8.20668C1.74786 8.38822 2.09507 8.36804 2.31696 8.14614L4.9975 5.46426L4.99805 16.0458L5.00376 16.1306C5.04514 16.4357 5.30664 16.6708 5.62305 16.6708L5.70786 16.6651C6.01292 16.6237 6.24805 16.3622 6.24805 16.0458L6.2475 5.46593L8.93322 8.14664L9.00338 8.20708C9.24826 8.38835 9.59545 8.36781 9.8171 8.14567C10.0609 7.90133 10.0605 7.5056 9.81614 7.26179L6.06209 3.51591L5.99198 3.45551C5.7473 3.27434 5.40039 3.29468 5.17868 3.51641Z"
-                  fill="currentColor"
-                />
-              </svg>
-              Sort
-            </button>
+                <div className="text-xs font-medium mb-2">Select fields to display</div>
+                {[
+                  'Job Request',
+                  'Submitted',
+                  'Status',
+                  'Submitter',
+                  'URL',
+                  'Assigned',
+                  'Priority',
+                  'Due Date',
+                  'Est. Value',
+                ].map((field) => (
+                  <div key={field} className="flex items-center gap-2 mb-1.5">
+                    <input
+                      type="checkbox"
+                      checked={showFields.includes(field)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setShowFields([...showFields, field]);
+                        } else {
+                          setShowFields(showFields.filter((item) => item !== field));
+                        }
+                      }}
+                      className="rounded text-[#4B6A4F] focus:ring-[#4B6A4F]"
+                    />
+                    <label htmlFor={field} className="text-xs">
+                      {field}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => setSelectSort(!selectSort)}
+                className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14.3757 3.33334L14.2909 3.33904C13.9858 3.38043 13.7507 3.64192 13.7507 3.95834L13.75 14.535L11.0668 11.8537L10.9966 11.7932C10.7519 11.6117 10.4047 11.6321 10.1829 11.854C9.9389 12.0982 9.93906 12.4939 10.1832 12.7379L13.9364 16.4879L14.0065 16.5484C14.2513 16.7298 14.5985 16.7095 14.8203 16.4875L18.5671 12.7375L18.6276 12.6674C18.8091 12.4227 18.7887 12.0755 18.5668 11.8537L18.4966 11.7932C18.2519 11.6117 17.9047 11.6321 17.6829 11.854L15 14.5383L15.0007 3.95834L14.995 3.87353C14.9536 3.56846 14.6921 3.33334 14.3757 3.33334ZM5.17868 3.51641L1.43304 7.26229L1.37253 7.33239C1.19099 7.57707 1.21118 7.92429 1.43307 8.14617L1.50317 8.20668C1.74786 8.38822 2.09507 8.36804 2.31696 8.14614L4.9975 5.46426L4.99805 16.0458L5.00376 16.1306C5.04514 16.4357 5.30664 16.6708 5.62305 16.6708L5.70786 16.6651C6.01292 16.6237 6.24805 16.3622 6.24805 16.0458L6.2475 5.46593L8.93322 8.14664L9.00338 8.20708C9.24826 8.38835 9.59545 8.36781 9.8171 8.14567C10.0609 7.90133 10.0605 7.5056 9.81614 7.26179L6.06209 3.51591L5.99198 3.45551C5.7473 3.27434 5.40039 3.29468 5.17868 3.51641Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Sort
+              </button>
+              <div
+                hidden={!selectSort}
+                className="absolute top-full left-0 p-2 text-xs bg-white rounded-sm"
+              >
+                <div className="text-xs font-medium mb-2">Select field to sort by</div>
+                {['Job Request', 'Submitted', 'Status', 'Priority', 'Due Date', 'Est. Value'].map(
+                  (field) => (
+                    <div key={field} className="flex items-center gap-2 mb-1.5">
+                      <input
+                        type="radio"
+                        checked={sortBy === field}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSortBy(field);
+                          }
+                        }}
+                        className="rounded text-[#4B6A4F] focus:ring-[#4B6A4F]"
+                      />
+                      <label htmlFor={field} className="text-xs">
+                        {field}
+                      </label>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
             <button
               onClick={() => console.log('Filter Button')}
               className="p-2 pr-3 flex items-center gap-1 cursor-pointer hover:bg-[#EEEEEE] rounded-md"
@@ -322,8 +527,14 @@ function App() {
           </button>
         </div>
       </header>
-      <main className="w-full h-[calc(100vh-9.5em)] h- overflow-y-scroll mt-26 text-[#121212]">
-        <Table showFields={showFields} />
+      <main
+        onClick={() => {
+          setSelectFields(false);
+          setSelectSort(false);
+        }}
+        className="w-full h-[calc(100vh-9.5em)] z-0 relative overflow-y-scroll mt-26 text-[#121212]"
+      >
+        <Table showFields={showFields} data={sortedData} setData={setSortedData} />
       </main>
       <footer className="fixed inset-x-0 bottom-0 inset-shadow-px-t bg-white text-[#757575] pl-8 pr-4 pt-1 font-medium flex">
         <a
